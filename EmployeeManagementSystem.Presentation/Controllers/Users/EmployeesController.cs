@@ -18,7 +18,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace EmployeeManagementSystem.Presentation.Controllers.Users
 {
     [ApiVersion("1.0")]
-    [Route("api/v{version:apiVersion}/admins/employees")]
+    [Route("api/v{version:apiVersion}/employees")]
     [AuthorizeFilter(nameof(UserTypes.Admin))]
     public class EmployeesController : BaseApiController
     {
