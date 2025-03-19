@@ -46,6 +46,7 @@ namespace EmployeeManagementSystem.Application.Features.Users.Employees.Commands
             await _unitOfWork.Repository<User>()
                              .AddAsync(employee);
 
+            employee = await GetEmployeeAsync(employee.Id, cancellationToken);
             var response = _mapper.Map<AddEmployeeCommandDto>(employee);
 
             return Created201(response);
@@ -53,10 +54,20 @@ namespace EmployeeManagementSystem.Application.Features.Users.Employees.Commands
 
         private async Task<bool> IsEmailExistsAsync(string email, CancellationToken token = default)
         {
+            _userSpecification.ClearCriteriaExpressions();
             _userSpecification.AddCriteriaExpression(u => !u.IsDeleted && u.Email == email && u.UserTypeId == (int)UserTypes.Employee);
 
             return await _unitOfWork.Repository<User>()
                                     .IsExistsAsync(_userSpecification, token);
+        }
+
+        private async Task<User?> GetEmployeeAsync(int id, CancellationToken token = default)
+        {
+            _userSpecification.ClearCriteriaExpressions();
+            _userSpecification.AddCriteriaExpression(u => !u.IsDeleted && u.Id == id);
+
+            return await _unitOfWork.Repository<User>()
+                                    .FindAsNoTrackingAsync(_userSpecification, token);
         }
 
         #endregion Methods
