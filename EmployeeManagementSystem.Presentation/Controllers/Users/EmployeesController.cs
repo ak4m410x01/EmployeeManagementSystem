@@ -81,8 +81,9 @@ namespace EmployeeManagementSystem.Presentation.Controllers.Users
         [ProducesResponseType(typeof(DeleteEmployeeCommandDto), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(DeleteEmployeeCommandDto), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(DeleteEmployeeCommandDto), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> DeleteEmployeeAsync([FromRoute] DeleteEmployeeCommandRequest request)
+        public async Task<IActionResult> DeleteEmployeeAsync(int id, [FromQuery] DeleteEmployeeCommandRequest request)
         {
+            request.Id = id;
             var response = await Mediator.Send(request);
             return ResponseResult(response);
         }
